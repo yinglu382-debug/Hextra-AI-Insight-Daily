@@ -5,6 +5,10 @@ command = "hugo --gc --minify -b ${URL}"
 [build.environment]
 HUGO_VERSION = "0.147.7"
 
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
 
 [[redirects]]
   from = "https://hextra-ai-insight-daily.netlify.app/*"
@@ -17,3 +21,8 @@ HUGO_VERSION = "0.147.7"
   to = "https://ai.hubtoday.app/:splat"
   status = 301
   force = true
+
+[[redirects]]
+  from = "/api/aggregator"
+  to = "/.netlify/functions/aggregator"
+  status = 200
