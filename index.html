@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宏观经济研究 - 科技资讯聚合</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .main-title {
+            font-size: 3rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #3498db, #e74c3c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+        }
+
+        .update-time {
+            background: #ecf0f1;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #34495e;
+        }
+
+        .section {
+            background: white;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-header i {
+            margin-right: 15px;
+            font-size: 1.8rem;
+        }
+
+        .section-content {
+            padding: 0;
+        }
+
+        .news-item {
+            padding: 20px;
+            border-bottom: 1px solid #ecf0f1;
+            transition: background-color 0.3s ease;
+        }
+
+        .news-item:last-child {
+            border-bottom: none;
+        }
+
+        .news-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .news-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .news-title a {
+            color: #2c3e50;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .news-title a:hover {
+            color: #3498db;
+        }
+
+        .news-summary {
+            color: #555;
+            margin-bottom: 10px;
+            line-height: 1.7;
+        }
+
+        .news-link {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .news-link a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .news-link a:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+            color: #7f8c8d;
+        }
+
+        .error {
+            background: #e74c3c;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 20px auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            margin: 10px 0;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .main-title {
+                font-size: 2rem;
+            }
+            
+            .section-header {
+                font-size: 1.2rem;
+                padding: 15px;
+            }
+            
+            .news-item {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="main-title">宏观经济研究</h1>
+            <p class="subtitle">科技资讯实时聚合平台</p>
+            <div class="update-time" id="updateTime">
+                <i class="fas fa-clock"></i> 最后更新: 加载中...
+            </div>
+            <button class="refresh-btn" onclick="refreshContent()">
+                <i class="fas fa-sync-alt"></i> 手动刷新
+            </button>
+        </div>
+
+        <div id="content">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i> 正在加载最新资讯...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let refreshInterval;
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadContent();
+            // 设置每小时自动刷新
+            refreshInterval = setInterval(loadContent, 60 * 60 * 1000);
+        });
+
+        // 加载内容
+        async function loadContent() {
+            try {
+                const response = await fetch('/api/news');
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                displayContent(data);
+                updateTime();
+            } catch (error) {
+                console.error('Error loading content:', error);
+                document.getElementById('content').innerHTML = 
+                    '<div class="error">加载失败: ' + error.message + '</div>';
+            }
+        }
+
+        // 显示内容
+        function displayContent(data) {
+            const sections = [
+                { key: 'mobile', title: '一、手机', icon: 'fas fa-mobile-alt' },
+                { key: 'smart_home', title: '二、智能家电', icon: 'fas fa-home' },
+                { key: 'automotive', title: '三、汽车', icon: 'fas fa-car' },
+                { key: 'os', title: '四、操作系统', icon: 'fas fa-desktop' },
+                { key: 'chip', title: '五、芯片', icon: 'fas fa-microchip' }
+            ];
+
+            let html = '';
+            
+            sections.forEach(section => {
+                const sectionData = data[section.key] || [];
+                html += `
+                    <div class="section">
+                        <div class="section-header">
+                            <i class="${section.icon}"></i>
+                            ${section.title}
+                        </div>
+                        <div class="section-content">
+                `;
+                
+                if (sectionData.length === 0) {
+                    html += '<div class="news-item">暂无相关资讯</div>';
+                } else {
+                    sectionData.forEach(item => {
+                        html += `
+                            <div class="news-item">
+                                <div class="news-title">
+                                    <a href="${item.url}" target="_blank">${item.title}</a>
+                                </div>
+                                <div class="news-summary">
+                                    ${item.summary || '暂无摘要'}
+                                </div>
+                                <div class="news-link">
+                                    来源: <a href="${item.url}" target="_blank">${item.source}</a>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('content').innerHTML = html;
+        }
+
+        // 更新时间显示
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleString('zh-CN');
+            document.getElementById('updateTime').innerHTML = 
+                '<i class="fas fa-clock"></i> 最后更新: ' + timeString;
+        }
+
+        // 手动刷新
+        function refreshContent() {
+            document.getElementById('content').innerHTML = 
+                '<div class="loading"><i class="fas fa-spinner fa-spin"></i> 正在刷新...</div>';
+            loadContent();
+        }
+
+        // 页面卸载时清除定时器
+        window.addEventListener('beforeunload', function() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+            }
+        });
+    </script>
+</body>
+</html>
